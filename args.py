@@ -30,4 +30,15 @@ def av_recommand():
     return random.choice(av_list)
 
 
+def changeName(url):
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    url = url
+    request = Request(url, headers=headers)
+    web_content = urlopen(request).read()
+    # 得到繞過轉址後的 html
+    soup = BeautifulSoup(web_content, 'html.parser')
+    h1 = soup.find('title')
+    name = str(h1)[7:-41:1]
+    # name = h1[7:-20:1]
+    return name
 # print(av_recommand())

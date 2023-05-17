@@ -1,8 +1,9 @@
 import os
 
-def deleteMp4(folderPath):
+
+def deleteMp4(folderPath, changeName):
     files = os.listdir(folderPath)
-    originFile = folderPath.split(os.path.sep)[-1] + '.mp4'
+    originFile = changeName + '.mp4'
     for file in files:
         if file != originFile:
             os.remove(os.path.join(folderPath, file))
