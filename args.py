@@ -1,6 +1,7 @@
 import argparse
 from bs4 import BeautifulSoup
 import random
+from urllib.request import urlretrieve
 from urllib.request import Request, urlopen
 from config import headers
 import re
@@ -31,14 +32,22 @@ def av_recommand():
 
 
 def changeName(url):
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    url = url
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0'}
+
+    # url = url
     request = Request(url, headers=headers)
+    # request.timeout = 10000
+    print(request)
     web_content = urlopen(request).read()
+    print(web_content)
+
     # 得到繞過轉址後的 html
     soup = BeautifulSoup(web_content, 'html.parser')
+    print(soup)
     h1 = soup.find('title')
     name = str(h1)[7:-41:1]
+    print("name:" + name)
     # name = h1[7:-20:1]
     return name
 # print(av_recommand())

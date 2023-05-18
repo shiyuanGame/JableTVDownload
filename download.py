@@ -19,8 +19,21 @@ from selenium.webdriver.chrome.options import Options
 
 
 def download(url):
-    tempchangeName = changeName(url)
     print('正在下載影片: ' + url)
+    # 得到 m3u8 網址
+    # htmlfile = cloudscraper.create_scraper(browser='chrome', delay=10).get(url)
+    options = Options()
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--disable-extensions')
+    options.add_argument('--headless')
+    options.add_argument(
+        "user-agent=Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36")
+    dr = webdriver.Chrome(chrome_options=options)
+    # dr = webdriver.Chrome()
+    dr.get(url)
+    tempchangeName= str(dr.title)[7:-41:1]
+    print("tempchangeName:"+tempchangeName)
     # 建立番號資料夾
     urlSplit = url.split('/')
     dirName = urlSplit[-2]
@@ -34,18 +47,7 @@ def download(url):
         print("文件可能已经下载过 检查一下", os.path.exists(dirName), dirName)
         exit()
 
-    # 得到 m3u8 網址
-    # htmlfile = cloudscraper.create_scraper(browser='chrome', delay=10).get(url)
-    options = Options()
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--disable-extensions')
-    options.add_argument('--headless')
-    options.add_argument(
-        "user-agent=Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36")
-    dr = webdriver.Chrome(chrome_options=options)
-    # dr = webdriver.Chrome()
-    dr.get(url)
+
     result = re.search("https://.+m3u8", dr.page_source)
     print(f'result: {result}')
     m3u8url = result[0]
@@ -103,3 +105,4 @@ def download(url):
     # get cover
     get_cover(html_file=dr.page_source, folder_path=folderPath,
               tempchangeName=tempchangeName)
+
