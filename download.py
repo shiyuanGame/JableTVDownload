@@ -50,8 +50,10 @@ def download(url):
     if os.path.exists(f'{dirName}/{dirName}.mp4') | os.path.exists(f'{dirName}/{tempchangeName}.mp4'):
 
         if os.path.exists(f'{dirName}/{dirName}.mp4')  :
+                #重命名
             renameFile( folderPath , dirName+".mp4" ,tempchangeName+".mp4" )
         if os.path.exists(f'{dirName}/{dirName}.jpg')  :
+                #重命名
             renameFile( folderPath , dirName+".jpg" ,tempchangeName+".jpg" )
         else:
             get_cover(html_file=dr.page_source, folder_path=folderPath, tempchangeName=tempchangeName)
@@ -109,7 +111,7 @@ def download(url):
     mergeMp4(folderPath, tsList, tempchangeName)
 
     #重命名
-    renameFile(folderPath,dirName  , tempchangeName)
+    # renameFile(folderPath,dirName  , tempchangeName)
 
 
     # 刪除子mp4
