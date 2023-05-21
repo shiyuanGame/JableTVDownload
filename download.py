@@ -21,6 +21,7 @@ from selenium.webdriver.chrome.options import Options
 def download(url):
     # tempchangeName = changeName(url)
     url=url.lower()
+    
     print('正在下載影片: ' + url)
     # 得到 m3u8 網址
     # htmlfile = cloudscraper.create_scraper(browser='chrome', delay=10).get(url)
