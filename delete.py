@@ -9,6 +9,10 @@ def deleteMp4(folderPath, changeName):
             os.remove(os.path.join(folderPath, file))
 
 
+def renameFile(path, oldname, changeName):
+    os.rename(os.path.join(path, oldname), os.path.join(path, changeName))
+
+
 def deleteM3u8(folderPath):
     files = os.listdir(folderPath)
     for file in files:
