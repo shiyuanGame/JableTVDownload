@@ -8,7 +8,7 @@ from Crypto.Cipher import AES
 from config import headers
 from crawler import prepareCrawl
 from merge import mergeMp4
-from delete import deleteM3u8, deleteMp4
+from delete import deleteM3u8, deleteMp4, renameFile
 from cover import get_cover
 import time
 import cloudscraper
@@ -20,6 +20,7 @@ from selenium.webdriver.chrome.options import Options
 
 def download(url):
     # tempchangeName = changeName(url)
+    url=url.lower()
     print('正在下載影片: ' + url)
     # 得到 m3u8 網址
     # htmlfile = cloudscraper.create_scraper(browser='chrome', delay=10).get(url)
@@ -39,16 +40,22 @@ def download(url):
     # 建立番號資料夾
     urlSplit = url.split('/')
     dirName = urlSplit[-2]
-    if os.path.exists(f'{dirName}/{dirName}.mp4'):
-        print('番號資料夾已存在, 跳過...')
-        exit()
+    # if os.path.exists(f'{dirName}/{dirName}.mp4') :
+    #     print('番號資料夾已存在, 跳過...')
+    #     exit()
     if not os.path.exists(dirName):
         os.makedirs(dirName)
     folderPath = os.path.join(os.getcwd(), dirName)
-    if (os.path.exists(folderPath)) & (os.path.isfile(os.path.join(folderPath, f"{dirName}.mp4"))) | (os.path.isfile(os.path.join(folderPath, f"{tempchangeName}.mp4"))):
+    if os.path.exists(f'{dirName}/{dirName}.mp4') | os.path.exists(f'{dirName}/{tempchangeName}.mp4'):
+
+        if os.path.exists(f'{dirName}/{dirName}.mp4')  :
+            renameFile( folderPath , dirName+".mp4" ,tempchangeName+".mp4" )
+        if os.path.exists(f'{dirName}/{dirName}.jpg')  :
+            renameFile( folderPath , dirName+".jpg" ,tempchangeName+".jpg" )
+        else:
+            get_cover(html_file=dr.page_source, folder_path=folderPath, tempchangeName=tempchangeName)
         print("文件可能已经下载过 检查一下", os.path.exists(dirName), dirName)
         exit()
-
     result = re.search("https://.+m3u8", dr.page_source)
     print(f'result: {result}')
     m3u8url = result[0]
@@ -99,6 +106,10 @@ def download(url):
 
     # 合成mp4
     mergeMp4(folderPath, tsList, tempchangeName)
+
+    #重命名
+    renameFile(folderPath,dirName  , tempchangeName)
+
 
     # 刪除子mp4
     deleteMp4(folderPath, tempchangeName)
